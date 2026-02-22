@@ -166,6 +166,11 @@ git push origin main
 
 Since your backend is in a subdirectory (`backend/`), you need to use `git subtree`:
 
+**First, add the Heroku remote:**
+```sh
+heroku git:remote -a your-coffee-brew-app
+```
+
 **Option 1: Using git subtree push (recommended)**
 ```sh
 git subtree push --prefix backend heroku main
@@ -350,6 +355,33 @@ Verify you're in the right place:
 git status
 ```
 
+### Issue: "fatal: 'heroku' does not appear to be a git repository"
+
+**Solution:**
+
+Add the Heroku git remote:
+```sh
+heroku git:remote -a your-coffee-brew-app
+```
+
+Verify it was added:
+```sh
+git remote -v
+```
+
+You should see:
+```
+heroku  https://git.heroku.com/your-coffee-brew-app.git (fetch)
+heroku  https://git.heroku.com/your-coffee-brew-app.git (push)
+origin  https://github.com/SixxPathz/coffee-brew-log.git (fetch)
+origin  https://github.com/SixxPathz/coffee-brew-log.git (push)
+```
+
+Now try deploying again:
+```sh
+git subtree push --prefix backend heroku main
+```
+
 ### Issue: Uncommitted changes before deployment
 
 **Solution:**
@@ -423,6 +455,14 @@ heroku addons:create heroku-postgresql:essential-0 --app your-coffee-brew-app
 ### Issue: Git subtree push fails
 
 **Solution:**
+
+First, ensure Heroku remote is added:
+```sh
+heroku git:remote -a your-coffee-brew-app
+
+# Verify it was added
+git remote -v
+```
 
 Try the alternative method:
 
