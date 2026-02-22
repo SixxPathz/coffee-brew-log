@@ -39,7 +39,7 @@ module.exports = {
         method: 'Espresso',
         coffeeGrams: 18,
         waterGrams: 36,
-        rating: 4,
+        rating: 3,
         tastingNotes: 'Sweet and smooth with caramel notes. Low acidity, perfect for espresso.',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -49,7 +49,7 @@ module.exports = {
         method: 'French Press',
         coffeeGrams: 32,
         waterGrams: 500,
-        rating: 4,
+        rating: 2,
         tastingNotes: 'Earthy and herbal with a heavy body. Notes of cedar and dark chocolate.',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -79,7 +79,7 @@ module.exports = {
         method: 'Pour Over',
         coffeeGrams: 20,
         waterGrams: 300,
-        rating: 5,
+        rating: 3,
         tastingNotes: 'Vibrant and complex with berry notes and a wine-like finish.',
         createdAt: new Date(),
         updatedAt: new Date()
