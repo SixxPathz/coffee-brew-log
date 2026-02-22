@@ -6,7 +6,9 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "migrate": "npx sequelize db:migrate",
-    "postinstall": "chmod +x ./node_modules/.bin/sequelize"
+    "seed": "npx sequelize db:seed:all",
+    "migrate:seed": "npm run migrate && npm run seed",
+    "heroku-postbuild": "npm run migrate:seed"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

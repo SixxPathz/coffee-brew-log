@@ -17,92 +17,90 @@ A minimal, modern full-stack app to log and manage your coffee brews.
 
 ## Tech Stack
 - **Frontend:** React, Tailwind CSS (deployed on Netlify)
-- **Backend:** Node.js, Express, Sequelize ORM (deployed on Render)
-- **Database:** PostgreSQL (default on Render)
+- **Backend:** Node.js, Express, Sequelize ORM (deployed on Heroku)
+- **Database:** PostgreSQL (Heroku Postgres)
 
 ---
 
 ## Getting Started
 
-### 1. Fork the Repository
-- Go to [https://github.com/Umuzi-org/micro-roastery-brew-logger-SixxPathz/tree/main](https://github.com/Umuzi-org/micro-roastery-brew-logger-SixxPathz/tree/main)
-- Click the **Fork** button (top right) to create your own copy.
-- Clone your fork:
+### 1. Clone the Repository
+- Go to [https://github.com/SixxPathz/micro-roastery-brew-logger-SixxPathz](https://github.com/SixxPathz/micro-roastery-brew-logger-SixxPathz)
+- Clone the repository:
 - Open your terminal and run:
   ```sh
-  git clone https://github.com/<your-username>/micro-roastery-brew-logger-SixxPathz.git
+  git clone https://github.com/SixxPathz/micro-roastery-brew-logger-SixxPathz.git
   cd micro-roastery-brew-logger-SixxPathz
   ```
 
 ---
 
-## 1. Creating a PostgreSQL Database on Render
+## Backend Deployment (Heroku)
 
-After forking the repository, your first step is to create a managed PostgreSQL database on Render:
+### 1. Prerequisites
+- Install the Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli
+- Create a Heroku account: https://signup.heroku.com/
 
-1. Go to your Render dashboard: https://dashboard.render.com/
-2. Click “New +” > “PostgreSQL”.
-3. Fill in the database details (name, region) and create the database.
-4. Once provisioned, click your new database to view connection details.
-5. Copy the Host, Database, User, Password, and Port values.
-
-
----
-
-## Backend Deployment (Render)
-
-### 1. Create a new Web Service on Render
-- Go to [https://dashboard.render.com/](https://dashboard.render.com/)
-- Click **New +** > **Web Service**
-- Connect your forked GitHub repo
-- Set the root directory to `backend`
-- Set the build command to:
+### 2. Create a new Heroku app
+- Open your terminal in the project root directory
+- Log in to Heroku:
   ```sh
-  npm install
+  heroku login
   ```
-- Set the start command to:
+- Create a new Heroku app:
   ```sh
-  npm run migrate && npm start
+  heroku create your-app-name
   ```
-- Choose Node version 20+ (Render will auto-detect from `.node-version`)
+  (If you don't specify a name, Heroku will generate one for you)
 
-### 2. Environment Variables (PostgreSQL & CORS)
+### 3. Add PostgreSQL Database
+- Add Heroku Postgres to your app:
+  ```sh
+  heroku addons:create heroku-postgresql:essential-0
+  ```
+  (This creates a PostgreSQL database and automatically sets the `DATABASE_URL` environment variable)
 
-- In the Render dashboard, add the following environment variables for your backend:
-  - `DB_USER` = your PostgreSQL username
-  - `DB_PASSWORD` = your PostgreSQL password
-  - `DB_NAME` = your PostgreSQL database name
-  - `DB_HOST` = your PostgreSQL host (from Render database dashboard)
-  - `DB_PORT` = 5432
-  - `FRONTEND_URL` = your Netlify site URL (e.g., https://your-site.netlify.app)
-  - `NODE_ENV` = production (optional, but recommended)
+### 4. Environment Variables (CORS)
+- Set the `FRONTEND_URL` environment variable:
+  ```sh
+  heroku config:set FRONTEND_URL=https://your-site.netlify.app
+  ```
+- Set `NODE_ENV` to production:
+  ```sh
+  heroku config:set NODE_ENV=production
+  ```
 
-**Example:**
-```
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
-DB_HOST=your_db_host
-DB_PORT=5432
-FRONTEND_URL=https://your-site.netlify.app
-NODE_ENV=production
-```
-- `FRONTEND_URL` is used by the backend to allow CORS requests from your deployed frontend.
+**Note:** You can initially set `FRONTEND_URL` to a placeholder and update it after deploying your frontend to Netlify.
 
-**Important:**
-Deploying to Netlify and Render:
+### 5. Deploy to Heroku
+- Make sure you're in the project root directory
+- Deploy your backend:
+  ```sh
+  git subtree push --prefix backend heroku main
+  ```
+  (This command pushes only the `backend` folder to Heroku)
+  
+  Or if you prefer, you can use:
+  ```sh
+  git push heroku `git subtree split --prefix backend main`:main --force
+  ```
 
-- **Step 1:** Deploy your backend on Render. You can leave `FRONTEND_URL` blank or set it to a placeholder.
-- **Step 2:** Deploy your frontend on Netlify. After deployment, copy your Netlify site URL.
-- **Step 3:** Go back to your Render backend environment variables, set `FRONTEND_URL` to your Netlify site URL (e.g., `https://your-site.netlify.app`), and redeploy your backend.
+### 6. Database Migrations and Seeding
+- The `heroku-postbuild` script in `package.json` automatically runs migrations and seeds the database with sample brew data when you deploy.
+- Your database will be populated with 8 sample brew entries automatically!
 
-This ensures your backend will accept requests from your frontend once both are live.
+### 7. API URL
+- After deploy, your backend URL will be: `https://your-app-name.herokuapp.com`
+- You can open your app with:
+  ```sh
+  heroku open
+  ```
 
-### 3. Database Migrations
-- The start command runs migrations automatically: `npm run migrate && npm start`
-
-### 4. API URL
-- After deploy, note your Render backend URL (e.g., `https://your-backend.onrender.com`)
+### 8. Useful Heroku Commands
+- View logs: `heroku logs --tail`
+- Run migrations manually: `heroku run npm run migrate`
+- Run seeds manually: `heroku run npm run seed`
+- Access Postgres: `heroku pg:psql`
 
 ---
 
@@ -126,7 +124,7 @@ This ensures your backend will accept requests from your frontend once both are 
 - In Netlify dashboard, go to **Site settings > Environment variables**
 - Add:
   - KEY = REACT_APP_API_URL
-  - VALUE = https://your-backend.onrender.com
+  - VALUE = https://your-app-name.herokuapp.com
 - This ensures the frontend talks to your deployed backend.
 
 ### 3. Deploy
