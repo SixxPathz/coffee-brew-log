@@ -9,7 +9,6 @@ const BrewForm = ({ initialData = {}, onSave, onDelete }) => {
   const [waterGrams, setWaterGrams] = useState(
     typeof initialData.waterGrams === "number" ? initialData.waterGrams : initialData.waterGrams ? parseFloat(initialData.waterGrams) : ""
   );
-  const [gramsError, setGramsError] = useState("");
   const [rating, setRating] = useState(initialData.rating || "");
   const [tastingNotes, setTastingNotes] = useState(initialData.tastingNotes || "");
   const [submitted, setSubmitted] = useState(false);
@@ -31,19 +30,6 @@ const BrewForm = ({ initialData = {}, onSave, onDelete }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    setGramsError("");
-    if (coffeeGrams === "" || waterGrams === "") {
-      setGramsError("Please enter both coffee and water grams.");
-      return;
-    }
-    if (typeof coffeeGrams !== "number" || typeof waterGrams !== "number" || isNaN(coffeeGrams) || isNaN(waterGrams)) {
-      setGramsError("Grams must be a valid number.");
-      return;
-    }
-    if (coffeeGrams <= 0 || waterGrams <= 0) {
-      setGramsError("Grams must be greater than zero.");
-      return;
-    }
     if (!isValid) {
       return;
     }
