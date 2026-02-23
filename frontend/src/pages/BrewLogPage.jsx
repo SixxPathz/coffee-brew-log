@@ -100,6 +100,12 @@ const BrewLogPage = () => {
                   <span role="img" aria-label="water">💧</span> {brew.waterGrams}g
                 </span>
               </div>
+              {/* Tasting notes */}
+              {brew.tastingNotes && (
+                <div className="mt-3 text-sm text-gray-300">
+                  {brew.tastingNotes}
+                </div>
+              )}
             </div>
 
             {/* Edit button */}
